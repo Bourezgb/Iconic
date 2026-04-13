@@ -1,13 +1,17 @@
 <?php
 /**
- * The main template file.
- * Fallback for all requests.
+ * Archive Template
  */
 
 get_header();
 ?>
 
 <div class="container section-padding">
+    <header style="margin-bottom: 3rem; text-align: center;">
+        <?php the_archive_title('<h1 class="section-title">', '</h1>'); ?>
+        <?php the_archive_description('<div style="color: #a0a0b0; max-width: 600px; margin: 1rem auto;">', '</div>'); ?>
+    </header>
+    
     <?php if (have_posts()) : ?>
         <div class="posts-grid">
             <?php while (have_posts()) : the_post(); ?>
@@ -49,7 +53,6 @@ get_header();
     <?php else : ?>
         <div class="text-center" style="padding: 4rem 0;">
             <h2><?php _e('No posts found', 'iconic'); ?></h2>
-            <p><?php _e('It seems we can\'t find what you\'re looking for.', 'iconic'); ?></p>
         </div>
     <?php endif; ?>
 </div>

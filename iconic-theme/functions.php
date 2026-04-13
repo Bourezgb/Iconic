@@ -1,69 +1,151 @@
 <?php
 /**
- * ICONIC Theme - Safe Core Functions
+ * ICONIC Theme Functions - AUTO SETUP v4.0
+ * 
+ * يقوم بالإعداد التلقائي للموقع عند التفعيل:
+ * - يضبط الروابط الدائمة
+ * - ينشئ الصفحات الأساسية
+ * - ينشئ القوائم
+ * - لا يحتاج أي تدخل يدوي
  * 
  * @package ICONIC
- * @version 1.0.3-safe
+ * @version 4.0.0
  */
 
 if (!defined('ABSPATH')) {
-    exit; // Prevent direct access
+    exit;
 }
 
-define('ICONIC_VERSION', '1.0.3');
+define('ICONIC_VERSION', '4.0.0');
 define('ICONIC_DIR', get_template_directory());
 define('ICONIC_URI', get_template_directory_uri());
 
 /**
  * Safe File Loader
- * Checks if file exists before including. Prevents Critical Errors.
  */
 function iconic_include_safe($file_slug) {
     $path = ICONIC_DIR . '/inc/' . $file_slug . '.php';
-    
     if (file_exists($path)) {
         require_once $path;
         return true;
-    } else {
-        // Log error for developer
-        error_log('ICONIC Theme Warning: Missing file - ' . $path);
-        
-        // Show admin notice only if user can manage options
-        if (is_admin() && current_user_can('manage_options')) {
-            add_action('admin_notices', function() use ($file_slug, $path) {
-                echo '<div class="notice notice-warning is-dismissible">';
-                echo '<h3>⚠️ ICONIC Theme Setup Warning</h3>';
-                echo '<p>The file <code>' . esc_html(basename($path)) . '</code> is missing.</p>';
-                echo '<p>The theme will still work with basic features.</p>';
-                echo '</div>';
-            });
-        }
-        return false;
     }
+    error_log('ICONIC: File missing - ' . basename($path));
+    return false;
 }
 
-// --- Load Core Files Safely ---
-iconic_include_safe('setup'); 
-iconic_include_safe('enqueue'); 
-iconic_include_safe('theme-support'); 
-iconic_include_safe('core-setup'); 
-iconic_include_safe('helpers'); 
-iconic_include_safe('template-functions'); 
-iconic_include_safe('seo'); 
-iconic_include_safe('ad-manager'); 
-iconic_include_safe('blocks'); 
-iconic_include_safe('navigation'); 
+/**
+ * Auto-Setup Wizard - يعمل مرة واحدة عند التفعيل
+ */
+register_activation_hook(__FILE__, 'iconic_auto_setup_wizard');
 
-// --- Fallback Support if setup.php is missing ---
-if (!function_exists('iconic_setup')) {
-    function iconic_fallback_setup() {
-        add_theme_support('title-tag');
-        add_theme_support('post-thumbnails');
-        add_theme_support('html5', array('comment-list', 'comment-form', 'search-form', 'gallery', 'caption'));
-        register_nav_menus(array(
-            'primary' => __('Primary Menu', 'iconic'),
-            'footer'  => __('Footer Menu', 'iconic'),
-        ));
+function iconic_auto_setup_wizard() {
+    // 1. ضبط الروابط الدائمة (يحل مشكلة WP Popular Posts)
+    update_option('permalink_structure', '/%postname%/');
+    flush_rewrite_rules();
+    
+    // 2. إنشاء الصفحات الأساسية
+    $pages = [
+        ['title' => 'من نحن', 'slug' => 'about', 'content' => ''],
+        ['title' => 'اتصل بنا', 'slug' => 'contact', 'content' => ''],
+        ['title' => 'سياسة الخصوصية', 'slug' => 'privacy', 'content' => ''],
+        ['title' => 'فريق التحرير', 'slug' => 'team', 'content' => '']
+    ];
+    
+    foreach ($pages as $page) {
+        if (!get_page_by_path($page['slug'])) {
+            wp_insert_post([
+                'post_title'   => $page['title'],
+                'post_name'    => $page['slug'],
+                'post_content' => $page['content'],
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+                'post_author'  => 1
+            ]);
+        }
     }
-    add_action('after_setup_theme', 'iconic_fallback_setup');
+    
+    // 3. تعيين الصفحة الرئيسية لعرض آخر المقالات (ليعمل front-page.php)
+    update_option('show_on_front', 'posts');
+    
+    // 4. إخفاء إشعارات ووردبريس المزعجة
+    update_option('dismissed_wp_pointers', ['wp460', 'wp470', 'wp480']);
+}
+
+/**
+ * Basic Theme Setup
+ */
+function iconic_basic_setup() {
+    add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
+    add_theme_support('automatic-feed-links');
+    add_theme_support('html5', [
+        'comment-list', 'comment-form', 'search-form', 'gallery', 'caption'
+    ]);
+    
+    add_theme_support('custom-logo', [
+        'height'      => 80,
+        'width'       => 200,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ]);
+    
+    register_nav_menus([
+        'primary' => __('القائمة الرئيسية', 'iconic'),
+        'footer'  => __('قائمة الفوتر', 'iconic'),
+    ]);
+    
+    load_theme_textdomain('iconic', ICONIC_DIR . '/languages');
+}
+add_action('after_setup_theme', 'iconic_basic_setup');
+
+/**
+ * Enqueue Assets
+ */
+function iconic_enqueue_assets() {
+    wp_enqueue_style('iconic-style', get_stylesheet_uri(), [], ICONIC_VERSION);
+    
+    wp_enqueue_style(
+        'iconic-fonts',
+        'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap',
+        [],
+        null
+    );
+}
+add_action('wp_enqueue_scripts', 'iconic_enqueue_assets');
+
+/**
+ * Widgets
+ */
+function iconic_widgets_init() {
+    register_sidebar([
+        'name'          => __('الشريط الجانبي', 'iconic'),
+        'id'            => 'sidebar-1',
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ]);
+}
+add_action('widgets_init', 'iconic_widgets_init');
+
+/**
+ * Helper Functions
+ */
+function iconic_excerpt_length($length) {
+    return 25;
+}
+add_filter('excerpt_length', 'iconic_excerpt_length');
+
+function iconic_body_classes($classes) {
+    if (is_singular()) $classes[] = 'singular';
+    if (is_front_page()) $classes[] = 'front-page';
+    return $classes;
+}
+add_filter('body_class', 'iconic_body_classes');
+
+// Fallback for ACF
+if (!function_exists('get_field')) {
+    function get_field($selector, $post_id = false) {
+        return false;
+    }
 }

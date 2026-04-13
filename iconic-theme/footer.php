@@ -1,20 +1,41 @@
-</main><!-- #main-content -->
+</main>
 
 <footer class="site-footer">
     <div class="container">
-        <p>&copy; <?php echo date('Y'); ?> ICONIC Media. All rights reserved.</p>
-        <?php if (has_nav_menu('footer')) : ?>
-        <nav class="footer-navigation">
-            <?php
-            wp_nav_menu(array(
-                'theme_location' => 'footer',
-                'menu_class'     => 'footer-menu',
-                'container'      => false,
-                'depth'          => 1,
-            ));
-            ?>
-        </nav>
-        <?php endif; ?>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>ICONIC</h4>
+                <p style="color: #a0a0b0; font-size: 0.9rem;">
+                    منصة إعلامية جزائرية رقمية تحتفي بالأصالة، العصرية، والابتكار.
+                </p>
+            </div>
+            
+            <div class="footer-col">
+                <h4><?php _e('Sections', 'iconic'); ?></h4>
+                <?php
+                wp_nav_menu(array(
+                    'theme_location' => 'footer',
+                    'menu_class'     => '',
+                    'fallback_cb'    => false,
+                    'depth'          => 1,
+                ));
+                ?>
+            </div>
+            
+            <div class="footer-col">
+                <h4><?php _e('Follow Us', 'iconic'); ?></h4>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#" aria-label="Facebook">F</a>
+                    <a href="#" aria-label="Twitter">T</a>
+                    <a href="#" aria-label="Instagram">I</a>
+                    <a href="#" aria-label="YouTube">Y</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright-bar">
+            <p>&copy; <?php echo date('Y'); ?> ICONIC. <?php _e('All rights reserved.', 'iconic'); ?></p>
+        </div>
     </div>
 </footer>
 
