@@ -1,31 +1,36 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Page Template
+ */
+get_header();
+?>
 
-<main class="site-main page-single">
-    <div class="container">
-        
-        <?php while (have_posts()) : the_post(); ?>
-            
+<main id="primary" class="site-main">
+    <div class="container section">
+        <?php
+        while (have_posts()) : the_post();
+            ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class('page-content'); ?>>
-                
-                <header class="page-header">
-                    <h1 class="page-title"><?php the_title(); ?></h1>
+                <header class="entry-header">
+                    <h1 class="entry-title"><?php the_title(); ?></h1>
                 </header>
-                
-                <?php if (has_post_thumbnail()) : ?>
-                <div class="page-featured-image">
-                    <?php the_post_thumbnail('iconic-featured'); ?>
+
+                <div class="entry-content">
+                    <?php
+                    the_content();
+                    
+                    // Display comments for pages if enabled
+                    if (comments_open() || get_comments_number()) :
+                        comments_template();
+                    endif;
+                    ?>
                 </div>
-                <?php endif; ?>
-                
-                <div class="page-body">
-                    <?php the_content(); ?>
-                </div>
-                
             </article>
-            
-        <?php endwhile; ?>
-        
+            <?php
+        endwhile;
+        ?>
     </div>
 </main>
 
-<?php get_footer(); ?>
+<?php
+get_footer();

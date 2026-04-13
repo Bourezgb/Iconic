@@ -4,29 +4,52 @@
  */
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class('article-card'); ?>>
-    <?php if (has_post_thumbnail()) : ?>
-    <a href="<?php the_permalink(); ?>" class="card-image">
-        <?php the_post_thumbnail('iconic-card'); ?>
-        <span class="card-category"><?php echo iconic_get_post_categories(); ?></span>
-    </a>
-    <?php endif; ?>
-    
-    <div class="card-content">
-        <h3 class="card-title">
-            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-        </h3>
-        
-        <p class="card-excerpt"><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
-        
-        <div class="card-meta">
-            <span class="card-meta-item">
-                <?php echo iconic_get_svg_icon('clock'); ?>
-                <?php echo iconic_get_reading_time(); ?>
-            </span>
-            <span class="card-meta-item">
-                <?php echo get_the_date(); ?>
-            </span>
-        </div>
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <header class="entry-header">
+        <?php
+        if (is_singular()) :
+            iconic_categories_badge();
+            the_title('<h1 class="entry-title">', '</h1>');
+            iconic_post_meta();
+        else :
+            the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '">', '</a></h2>');
+        endif;
+
+        if (has_post_thumbnail() && !is_singular()) :
+            ?>
+            <div class="post-thumbnail">
+                <a href="<?php the_permalink(); ?>">
+                    <?php the_post_thumbnail('large', array('loading' => 'lazy')); ?>
+                </a>
+            </div>
+            <?php
+        endif;
+        ?>
+    </header>
+
+    <div class="entry-content">
+        <?php
+        if (is_singular()) {
+            the_content();
+        } else {
+            the_excerpt();
+        }
+        ?>
     </div>
+
+    <?php if (is_singular()) : ?>
+        <footer class="entry-footer">
+            <?php
+            // Post tags
+            $tags = get_the_tags();
+            if ($tags) {
+                echo '<div class="post-tags">';
+                foreach ($tags as $tag) {
+                    echo '<a href="' . esc_url(get_tag_link($tag->term_id)) . '" class="tag-link">' . esc_html($tag->name) . '</a>';
+                }
+                echo '</div>';
+            }
+            ?>
+        </footer>
+    <?php endif; ?>
 </article>
