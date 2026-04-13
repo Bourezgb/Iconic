@@ -1,0 +1,34 @@
+/*
+Theme Name: ICONIC Safe Core
+Theme URI: https://iconictv.tv
+Author: ICONIC Team
+Description: النسخة الآمنة الأساسية لمنصة ICONIC. خالية من الأخطاء الحرجة.
+Version: 1.0.0-safe
+Requires PHP: 7.4
+Text Domain: iconic
+*/
+
+/* Reset بسيط جداً */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background-color: #0a0a0c;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+a { color: #00e5ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* RTL Support */
+html[lang^="ar"] body {
+    direction: rtl;
+    text-align: right;
+}

@@ -1,82 +1,43 @@
 ```
-# WordPress theme development
-wp-content/themes/iconic-theme/*.css.map
-wp-content/themes/iconic-theme/node_modules/
-wp-content/themes/iconic-theme/vendor/
-wp-content/themes/iconic-theme/.DS_Store
-wp-content/themes/iconic-theme/Thumbs.db
-wp-content/themes/iconic-theme/*.log
-wp-content/themes/iconic-theme/*.tmp
-wp-content/themes/iconic-theme/.env
-wp-content/themes/iconic-theme/.env.local
-wp-content/themes/iconic-theme/.env.*
-wp-content/themes/iconic-theme/.vscode/
-wp-content/themes/iconic-theme/.idea/
-wp-content/themes/iconic-theme/__pycache__/
-wp-content/themes/iconic-theme/*.pyc
-wp-content/themes/iconic-theme/dist/
-wp-content/themes/iconic-theme/build/
-wp-content/themes/iconic-theme/coverage/
-wp-content/themes/iconic-theme/htmlcov/
-wp-content/themes/iconic-theme/.coverage
-wp-content/themes/iconic-theme/.mypy_cache/
-wp-content/themes/iconic-theme/.pytest_cache/
-wp-content/themes/iconic-theme/target/
-wp-content/themes/iconic-theme/.gradle/
-wp-content/themes/iconic-theme/.nyc_output/
-wp-content/themes/iconic-theme/coverage/lcov-report/
-wp-content/themes/iconic-theme/.sass-cache/
-wp-content/themes/iconic-theme/*.min.css
-wp-content/themes/iconic-theme/*.min.js
-wp-content/themes/iconic-theme/assets/css/*.map
-wp-content/themes/iconic-theme/assets/js/*.map
-wp-content/themes/iconic-theme/composer.lock
-wp-content/themes/iconic-theme/package-lock.json
-wp-content/themes/iconic-theme/yarn.lock
-wp-content/themes/iconic-theme/.gitlab-ci.yml
-wp-content/themes/iconic-theme/.travis.yml
-wp-content/themes/iconic-theme/appspec.yml
-wp-content/themes/iconic-theme/*.zip
-wp-content/themes/iconic-theme/*.gz
-wp-content/themes/iconic-theme/*.tar
-wp-content/themes/iconic-theme/*.tgz
-wp-content/themes/iconic-theme/*.bz2
-wp-content/themes/iconic-theme/*.xz
-wp-content/themes/iconic-theme/*.7z
-wp-content/themes/iconic-theme/*.rar
-wp-content/themes/iconic-theme/*.zst
-wp-content/themes/iconic-theme/*.lz4
-wp-content/themes/iconic-theme/*.lzh
-wp-content/themes/iconic-theme/*.cab
-wp-content/themes/iconic-theme/*.arj
-wp-content/themes/iconic-theme/*.rpm
-wp-content/themes/iconic-theme/*.deb
-wp-content/themes/iconic-theme/*.Z
-wp-content/themes/iconic-theme/*.lz
-wp-content/themes/iconic-theme/*.lzo
-wp-content/themes/iconic-theme/*.tar.gz
-wp-content/themes/iconic-theme/*.tar.bz2
-wp-content/themes/iconic-theme/*.tar.xz
-wp-content/themes/iconic-theme/*.tar.zst
+# Compressed files
+*.tar.gz
 
-# WordPress core files (if accidentally included)
-wp-config.php
-wp-content/uploads/
-wp-content/cache/
-wp-content/upgrade/
-wp-content/backup-db/
-wp-content/languages/
-wp-content/plugins/
-wp-content/mu-plugins/
-wp-admin/
-wp-includes/
+# Environment
+.env
+.env.local
+*.env.*
 
-# General system files
-.DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
-.Spotlight-V100
-.Trashes
-apdisk
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+target/
+.gradle/
+
+# Build artifacts
+dist/
+build/
+coverage/
+htmlcov/
+*.pyc
+*.class
+*.o
+*.exe
+*.dll
+*.so
+*.a
+*.obj
+*.out
 ```
